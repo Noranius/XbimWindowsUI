@@ -93,6 +93,8 @@
                     <MenuItem Header="_WexBim" Command="{x:Static local:XplorerMainWindow.OpenExportWindowCmd}" />
                 </MenuItem>
                 <Separator />
+                <MenuItem Header="Load Additional Library" ToolTip="Load additional IFC library" Click="MenuItem_Click"/>
+                <Separator />
                 <MenuItem Header="_Run command" Click="ShowCommandBox" />
                 <MenuItem Header="_Exit" Click="Exit" />
             </MenuItem>

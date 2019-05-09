@@ -46,6 +46,7 @@ using Serilog;
 using Serilog.Core;
 using Serilog.Events;
 using Xbim.IO;
+using System.Reflection;
 
 #endregion
 
@@ -1131,6 +1132,40 @@ namespace XbimXplorer
         {
             CommandBox.Visibility = Visibility.Visible;
             CommandPrompt.Focus();
+        }
+
+        ///Author: Mathias Artus
+        /// <summary>
+        /// Void for loading a new library
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void MenuItem_Click(object sender, RoutedEventArgs e)
+        {
+            OpenFileDialog dlg = new OpenFileDialog();
+            dlg.RestoreDirectory = true;
+            dlg.Multiselect = false;
+            dlg.Filter = "Dynamic linked library (*.dll)|*.dll";
+
+            dlg.FileOk += LoadLibrary;
+            dlg.ShowDialog();
+        }
+
+        ///Author: Mathias Artus
+        /// <summary>
+        /// Load a library dynamically for Xbim xPlorer
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void LoadLibrary(object sender, CancelEventArgs e)
+        {
+            OpenFileDialog dlg = sender as OpenFileDialog;
+
+            //load dll
+            Assembly itdDim = Assembly.LoadFile(dlg.FileName);
+            EntityFactory.AddTypesOfAssembly(itdDim);
+
+            lokale Xbim-Verweise einfügen;
         }
     }
 }
