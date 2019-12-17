@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Text;
 using System.Windows.Media;
+using System.Windows.Media.Imaging;
 using System.Windows.Media.Media3D;
 using Xbim.Ifc;
 using Xbim.ModelGeometry.Scene;
@@ -88,6 +89,30 @@ namespace Xbim.Presentation
             // freeze and return
             mat.Freeze();
             return mat;
+        }
+
+        /// <summary>
+        /// Generate a material from an image (jpg, bmp, ...)
+        /// </summary>
+        /// <param name="pathTexture">Path to the related image</param>
+        /// <returns>A <see cref="DiffuseMaterial">DiffuseMaterial</see> with the given texture</returns>
+        private static Material MaterialFromImage(string pathTexture)
+        {
+            BitmapImage textureImage = new BitmapImage(new Uri(pathTexture));
+            return WpfMaterial.MaterialFromImage(textureImage);
+        }
+
+        /// <summary>
+        /// Generate a material from an BitmapImage
+        /// </summary>
+        /// <param name="textureImage"><see cref="BitmapImage">Bitmapimage</see> for the material</param>
+        /// <returns>A <see cref="DiffuseMaterial">DiffuseMaterial</see> with the given texture</returns>
+        private static Material MaterialFromImage (BitmapImage textureImage)
+        {
+            ImageBrush brush = new ImageBrush(textureImage);
+            Material textureMaterial = new DiffuseMaterial(brush);
+            textureMaterial.Freeze();
+            return textureMaterial;
         }
 
         public string Description => _description;
