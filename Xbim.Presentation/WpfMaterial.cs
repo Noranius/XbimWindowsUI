@@ -56,7 +56,10 @@ namespace Xbim.Presentation
                 _description = "Texture " + colour;
                 IsTransparent = colour.IsTransparent;
             }
-            _material.Freeze();
+            if (_material != null)
+            {
+                _material.Freeze();
+            }
         }
 
         /// <summary>
