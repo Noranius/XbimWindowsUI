@@ -1,9 +1,12 @@
-﻿using System;
+﻿using Microsoft.Extensions.Logging;
+using System;
+using System.IO;
 using System.Text;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Media.Media3D;
 using Xbim.Ifc;
+using Xbim.Ifc4.Interfaces;
 using Xbim.ModelGeometry.Scene;
 
 namespace Xbim.Presentation
@@ -13,6 +16,8 @@ namespace Xbim.Presentation
         Material _material;
         string _description;
         public bool IsTransparent;
+
+        protected static ILogger logger { get; private set; }
 
         // empty constructor
         public WpfMaterial()
@@ -30,7 +35,13 @@ namespace Xbim.Presentation
         {
             return wpfMaterial._material;
         }
-       
+
+        public static void SetLogger(ILogger Logger)
+        {
+            WpfMaterial.logger = Logger;
+        }
+
+
         public void CreateMaterial(XbimTexture texture)
         {            
             if (texture.ColourMap.Count > 1)
@@ -57,6 +68,14 @@ namespace Xbim.Presentation
                 _description = "Texture " + colour;
                 IsTransparent = colour.IsTransparent;
             }
+            else if (texture.HasImageTexture)
+            {
+                if (texture.TextureDefinition is IIfcImageTexture imageTexture)
+                {
+                    _material = WpfMaterial.MaterialFromImage(imageTexture);
+                }
+            }
+
             _material.Freeze();
         }
 
@@ -118,5 +137,69 @@ namespace Xbim.Presentation
         public string Description => _description;
         
         public bool IsCreated => _material != null;
+
+        private static Material MaterialFromImage(IIfcImageTexture imageTexture)
+        {
+            //Check if URI is ok
+            if (!Uri.IsWellFormedUriString(imageTexture.URLReference, UriKind.RelativeOrAbsolute))
+            {
+                WpfMaterial.logger.LogWarning("invalid uri: " + imageTexture.URLReference);
+                return WpfMaterial.ErrorMaterial();
+            }
+
+            string texturePath;
+            Uri myUri = new Uri(imageTexture.URLReference, UriKind.RelativeOrAbsolute);
+            if (myUri.IsAbsoluteUri)
+            {
+                texturePath = myUri.LocalPath;
+            }
+            else
+            {
+                //create Path relative to source path
+                Uri modelPathUri = imageTexture.Model.SourcePath;
+                string modelPathString = modelPathUri.LocalPath;
+                string modelDir = Path.GetDirectoryName(modelPathString);
+                Uri modelDirUri = new Uri(modelDir + "\\");
+                Uri absoluteTexturePathUri = new Uri(modelDirUri, myUri);
+                texturePath = absoluteTexturePathUri.LocalPath;
+            }
+
+            
+
+            //Check file existence
+            if (!File.Exists(texturePath))
+            {
+                WpfMaterial.logger.LogWarning("The File for the texture could not be found. Object ID: " + imageTexture.EntityLabel + ", Path: " + imageTexture.URLReference);
+                return WpfMaterial.ErrorMaterial();
+            }
+
+            try
+            {
+                BitmapImage img = new BitmapImage(new Uri(texturePath));
+                ImageBrush brush = new ImageBrush(img);
+                Material mat = new DiffuseMaterial(brush);
+                return mat;
+            }
+            catch (Exception ex)
+            {
+                //Fall back
+                WpfMaterial.logger.LogWarning("Could not load image texture: " + ex.ToString());
+                return WpfMaterial.ErrorMaterial();
+            }
+        }
+
+        /// <summary>
+        /// If a texture could not been loaded from the file,
+        /// a red material is used
+        /// </summary>
+        /// <returns></returns>
+        private static Material ErrorMaterial()
+        {
+            Color col = Color.FromRgb(255, 0, 0);
+            Brush brush = new SolidColorBrush(col);
+            Material mat = new DiffuseMaterial(brush);
+            mat.Freeze();
+            return mat;
+        }
     }
 }

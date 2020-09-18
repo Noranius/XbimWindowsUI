@@ -27,6 +27,8 @@ namespace Xbim.Presentation.LayerStyling
         public SurfaceLayerStyler(ILogger logger = null)
         {
             Logger = logger ?? XbimLogging.CreateLogger<SurfaceLayerStyler>();
+
+            WpfMaterial.SetLogger(this.Logger);
         }
 
         /// <summary>
@@ -211,10 +213,14 @@ namespace Xbim.Presentation.LayerStyling
 
         protected IEnumerable<XbimShapeInstance> GetShapeInstancesToRender(IGeometryStoreReader geomReader, HashSet<short> excludedTypes)
         {
+            //var shapeInstances = geomReader.ShapeInstances
+            //    .Where(s => s.RepresentationType == XbimGeometryRepresentationType.OpeningsAndAdditionsIncluded
+            //                &&
+            //                !excludedTypes.Contains(s.IfcTypeId));
             var shapeInstances = geomReader.ShapeInstances
-                .Where(s => s.RepresentationType == XbimGeometryRepresentationType.OpeningsAndAdditionsIncluded
-                            &&
-                            !excludedTypes.Contains(s.IfcTypeId));
+                .Where(s => (s.RepresentationType == XbimGeometryRepresentationType.OpeningsAndAdditionsIncluded
+                            || s.RepresentationType == XbimGeometryRepresentationType.OpeningsAndAdditionsOnly)
+                            && !excludedTypes.Contains(s.IfcTypeId));
             return shapeInstances;
         }
 

@@ -227,8 +227,8 @@ namespace Xbim.Presentation
         {
             typeof(Ifc2x3.ProductExtension.IfcSpace),
             typeof(Ifc4.ProductExtension.IfcSpace),
-            typeof(Ifc2x3.ProductExtension.IfcFeatureElement),
-            typeof(Ifc4.ProductExtension.IfcFeatureElement)
+            //typeof(Ifc2x3.ProductExtension.IfcFeatureElement),
+            //typeof(Ifc4.ProductExtension.IfcFeatureElement)
         };
 
         /// <summary>
