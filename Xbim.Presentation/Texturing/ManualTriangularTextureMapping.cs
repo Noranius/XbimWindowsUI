@@ -44,7 +44,7 @@ namespace Xbim.Presentation.Texturing
         {
             IIfcTriangulatedFaceSet faceSet = _ifcTextMap.MappedTo as IIfcTriangulatedFaceSet;
             Point[] result = new Point[_numberOfVertices];
-            for (int triangleIdx = 0; triangleIdx < _ifcTextMap.TexCoordIndex.Count; triangleIdx++)
+            Parallel.For(0, _ifcTextMap.TexCoordIndex.Count, (triangleIdx) =>
             {
                 var texCoordTriangle = _ifcTextMap.TexCoordIndex[triangleIdx];
                 for (int verticeIdx = 0; verticeIdx < texCoordTriangle.Count; verticeIdx++)
@@ -54,7 +54,7 @@ namespace Xbim.Presentation.Texturing
 
                     result[verticeRefIdx] = new Point(_ifcTextMap.TexCoords.TexCoordsList[texCoordIdx][0], _ifcTextMap.TexCoords.TexCoordsList[texCoordIdx][1]);
                 }
-            }
+            });
 
             return result;
         }
