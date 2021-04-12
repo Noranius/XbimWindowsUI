@@ -264,7 +264,7 @@ namespace Xbim.Presentation.LayerStyling
             Model3DGroup tmpOpaquesGroup)
         {
             var mg = new WpfMeshGeometry3D(wpfMaterial, wpfMaterial, wpfMaterial.IfcTextureCoordinate);
-            
+            // set the tag of the child of mg to mg, so that it can be identified on click
             mg.WpfModel.SetValue(FrameworkElement.TagProperty, mg);
             mg.BeginUpdate();
             if (wpfMaterial.IsTransparent)
