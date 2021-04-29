@@ -12,12 +12,19 @@
     <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
     <Version>5.1.0.0</Version>
     <PackageIcon>XbimIcon.png</PackageIcon>
+    <Platforms>AnyCPU;x86</Platforms>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net472|AnyCPU'">
     <OutputPath>..\Output\Debug\</OutputPath>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net472|x86'">
+    <OutputPath>..\Output\Debug\</OutputPath>
+  </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net472|AnyCPU'">
-    <OutputPath>..\Output\Release</OutputPath>
+    <OutputPath>C:\Users\ripo9018\source\repos\xBIM\own\XbimWindowsUI\Output\Release\Xbim.Presentation\</OutputPath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net472|x86'">
+    <OutputPath>C:\Users\ripo9018\source\repos\xBIM\own\XbimWindowsUI\Output\Release\Xbim.Presentation\</OutputPath>
   </PropertyGroup>
   <ItemGroup>
     <Compile Update="Properties\Resources.de.Designer.cs">
