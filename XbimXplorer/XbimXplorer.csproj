@@ -87,6 +87,8 @@
     <Folder Include="Properties\" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\..\..\DamageModelingTools\UnityCommunication\UnityCommunication.csproj" />
+    <ProjectReference Include="..\..\..\..\DamageModelingTools\UnityIntegrationToolbox\UnityIntegrationToolbox.csproj" />
     <ProjectReference Include="..\Xbim.Presentation\Xbim.Presentation.csproj" />
   </ItemGroup>
   <ItemGroup>

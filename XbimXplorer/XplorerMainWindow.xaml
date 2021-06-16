@@ -5,6 +5,7 @@
         xmlns:local="clr-namespace:XbimXplorer"
         xmlns:diag="clr-namespace:System.Diagnostics;assembly=WindowsBase"
         xmlns:etb="clr-namespace:XbimXplorer.EditableTextBlock"
+        xmlns:unity3DVisualization="clr-namespace:Xbim.Presentation.Unity3DVisualization;assembly=Xbim.Presentation"
     xmlns:avalonDock="http://schemas.xceed.com/wpf/xaml/avalondock"
     xmlns:viewModels="clr-namespace:Xbim.Ifc.ViewModels;assembly=Xbim.Ifc"
     Title="Xbim Xplorer" Height="600" Width="800" 
@@ -118,8 +119,8 @@
                 <Separator Visibility="Visible"/>
                 <MenuItem Header="Isolate selected objects" Click="IsolateSelected"/>
                 <MenuItem Header="Hide selected objects" Click="HideSelected"/>
-                <MenuItem Header="Show all objects" Click="RestoreView"/>
                 <MenuItem Header="Select visualization context" Click="SelectRepresentationContext"/>
+                <MenuItem Header="Show all objects" Click="RestoreView"/>
                 <Separator Visibility="{Binding DeveloperVisible, ElementName=MainWindow}" />
                 <MenuItem x:Name="DeveloperMenu" Header="_Developer windows" Visibility="{Binding DeveloperVisible, ElementName=MainWindow}" >
                     <MenuItem Header="IFC stripping" Click="OpenStrippingWindow">
@@ -201,7 +202,7 @@
                         </avalonDock:LayoutAnchorablePane>
                     </avalonDock:LayoutAnchorablePaneGroup>
                     <avalonDock:LayoutDocumentPane x:Name="MainDocPane">
-                        <avalonDock:LayoutDocument  CanClose="False" Title="3D View">
+                        <avalonDock:LayoutDocument x:Name="LayoutDocument3DView"  CanClose="False" Title="3D View">
                             <xbim:DrawingControl3D 
                                 x:Name="DrawingControl" 
                                    SelectedEntity="{Binding Path=SelectedItem, ElementName=MainWindow, Mode=TwoWay}"    
@@ -210,8 +211,7 @@
                                    Width="Auto" 
                                    Height="Auto" 
                                    MouseDoubleClick="SpatialControl_MouseDoubleClick"
-                                   WcsAdjusted="{x:Static local:App.ContextWcsAdjustment}"
-                                   >
+                                   WcsAdjusted="{x:Static local:App.ContextWcsAdjustment}" Visibility="Visible">
                                 <xbim:DrawingControl3D.Background>
                                     <LinearGradientBrush EndPoint="0.5,1" MappingMode="RelativeToBoundingBox" StartPoint="0.5,0">
                                         <GradientStop Color="#FFB9B1B1" Offset="1"/>
@@ -219,6 +219,9 @@
                                     </LinearGradientBrush>
                                 </xbim:DrawingControl3D.Background>
                             </xbim:DrawingControl3D>
+                        </avalonDock:LayoutDocument>
+                        <avalonDock:LayoutDocument CanClose="False" Title="Unity">
+                            <unity3DVisualization:IfcUnityPanel UnityApplicationPath=".\UnityPlugin\WPF Test Project.exe" UnityWorkingDirectory=".\UnityPlugin" PortNumberIn="4963" PortNumberOut="4960" Model ="{Binding}"/>
                         </avalonDock:LayoutDocument>
                     </avalonDock:LayoutDocumentPane>
                 </avalonDock:LayoutPanel>

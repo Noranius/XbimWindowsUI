@@ -13,6 +13,7 @@
     <Version>5.1.0.0</Version>
     <PackageIcon>XbimIcon.png</PackageIcon>
     <Platforms>AnyCPU;x86</Platforms>
+    <AssemblyOriginatorKeyFile>..\XbimOpenSourceKeyFile.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net472|AnyCPU'">
     <OutputPath>..\Output\Debug\</OutputPath>
@@ -48,11 +49,18 @@
     <Resource Include="assets\*.*" />
   </ItemGroup>
   <ItemGroup>
+    <None Remove="Unity3DVisualization\IfcUnityPanel.xaml" />
+  </ItemGroup>
+  <ItemGroup>
     <PackageReference Include="HelixToolkit.Wpf" Version="2015.1.715" />
     <PackageReference Include="PropertyTools.Wpf" Version="2015.1.66" />
     <PackageReference Include="Xbim.Essentials" Version="5.1.322-develop" />
     <PackageReference Include="Xbim.Geometry" Version="5.1.403" />
     <PackageReference Include="Xbim.Geometry.Engine.Interop" Version="5.1.403" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\..\DamageModelingTools\UnityCommunication\UnityCommunication.csproj" />
+    <ProjectReference Include="..\..\..\..\DamageModelingTools\UnityIntegrationToolbox\UnityIntegrationToolbox.csproj" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="Microsoft.CSharp" />
@@ -62,6 +70,11 @@
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xaml" />
     <Reference Include="WindowsBase" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Update="Unity3DVisualization\IfcUnityPanel.xaml.cs">
+      <DependentUpon>%(Filename)</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Update="Properties\Resources.de.resx">

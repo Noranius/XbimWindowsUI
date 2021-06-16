@@ -349,6 +349,8 @@ namespace XbimXplorer
                     Logger.LogWarning("Settings prevent mesh creation.");
                 }
                 args.Result = model;
+
+
             }
             catch (Exception ex)
             {
